@@ -145,6 +145,62 @@ ban.style.display='none';
 }
 document.getElementById('jwt-input').addEventListener('input',decode);
 </script>
+<!-- Pro Features Section -->
+<style>
+.pro-section{max-width:900px;margin:40px auto 0;padding:0 16px 40px;position:relative}
+.pro-hd{text-align:center;margin-bottom:20px}
+.pro-hd h2{font-size:1.5rem;color:#e94560;margin-bottom:4px}
+.pro-hd p{color:#888;font-size:.9rem}
+.pro-wrap{position:relative;cursor:pointer;border-radius:12px;overflow:hidden}
+.pro-blur{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;filter:blur(6px);opacity:.6;pointer-events:none;user-select:none}
+.pro-card{background:#16213e;border:1px solid #0f3460;border-radius:10px;padding:20px}
+.pro-card h3{font-size:1rem;color:#53d8fb;margin-bottom:8px}
+.pro-card p{color:#999;font-size:.85rem;line-height:1.5}
+.pro-card .mock-ui{margin-top:12px;background:#1a1a2e;border:1px solid #0f3460;border-radius:6px;padding:10px;font-family:monospace;font-size:.75rem;color:#555}
+.pro-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(26,26,46,.4);z-index:2}
+.pro-lock-icon{font-size:3rem;margin-bottom:10px}
+.pro-lock-text{font-size:1.1rem;font-weight:600;color:#e0e0e0}
+.pro-lock-sub{font-size:.85rem;color:#888;margin-top:4px}
+.pro-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.pro-modal-overlay.active{display:flex}
+.pro-modal{background:#16213e;border:1px solid #0f3460;border-radius:16px;padding:36px;max-width:440px;width:90%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.pro-modal h3{font-size:1.4rem;color:#fff;margin-bottom:6px}
+.pro-modal .pro-price{font-size:2rem;font-weight:700;color:#e94560;margin:12px 0}
+.pro-modal ul{text-align:left;list-style:none;margin:18px 0;padding:0}
+.pro-modal ul li{padding:8px 0;color:#ccc;font-size:.95rem;border-bottom:1px solid #0f3460}
+.pro-modal ul li::before{content:"✅ ";margin-right:6px}
+.pro-modal ul li:last-child{border-bottom:none}
+.pro-btn-upgrade{display:inline-block;width:100%;padding:14px;background:#e94560;color:#fff;font-size:1.05rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s;margin-top:8px}
+.pro-btn-upgrade:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(233,69,96,.4)}
+.pro-btn-later{background:none;border:none;color:#888;font-size:.9rem;cursor:pointer;margin-top:14px;padding:8px;transition:color .2s}
+.pro-btn-later:hover{color:#ccc}
+@media(max-width:600px){.pro-blur{grid-template-columns:1fr}}
+</style>
+<div class="pro-section">
+<div class="pro-hd"><h2>🔒 Pro Features</h2><p>Advanced JWT tools for developers</p></div>
+<div class="pro-wrap" onclick="document.getElementById('proModal').classList.add('active')">
+<div class="pro-blur">
+<div class="pro-card"><h3>🔧 JWT Generator</h3><p>Create JWT tokens with custom headers and payloads. Choose algorithm, set expiry, and sign with your secret.</p><div class="mock-ui">{"alg":"HS256","typ":"JWT"}<br>→ eyJhbGciOi...</div></div>
+<div class="pro-card"><h3>✅ Signature Verification</h3><p>Verify JWT signatures with HMAC, RSA, or ECDSA keys. Paste your secret or public key to validate.</p><div class="mock-ui">Secret: ••••••••<br>Status: ✓ Valid</div></div>
+<div class="pro-card"><h3>📋 Batch Decode</h3><p>Decode multiple JWT tokens at once. Paste a list of tokens and get all headers and payloads decoded.</p><div class="mock-ui">Token 1: ✓ decoded<br>Token 2: ✓ decoded</div></div>
+</div>
+<div class="pro-lock"><div class="pro-lock-icon">🔒</div><div class="pro-lock-text">Pro Features Locked</div><div class="pro-lock-sub">Click to unlock</div></div>
+</div>
+</div>
+<div class="pro-modal-overlay" id="proModal" onclick="if(event.target===this)this.classList.remove('active')">
+<div class="pro-modal">
+<h3>Unlock Pro Features</h3>
+<div class="pro-price">$14</div>
+<ul>
+<li>JWT Generator — create & sign tokens</li>
+<li>Signature Verification — HMAC, RSA, ECDSA</li>
+<li>Batch Decode — process multiple tokens</li>
+<li>Priority updates & support</li>
+</ul>
+<a class="pro-btn-upgrade" href="https://feifeicch.gumroad.com/l/ai-jwt-decoder-pro" target="_blank">Upgrade to Pro — $14</a>
+<br><button class="pro-btn-later" onclick="document.getElementById('proModal').classList.remove('active')">Maybe later</button>
+</div>
+</div>
 <script src="https://alwingulla.com/88/tag.min.js" data-zone="130747" async data-cfasync="false"></script>
 </body>
 </html>
