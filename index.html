@@ -1,209 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JWT Decoder - Decode and Verify JWT Tokens</title>
+<title>AI JWT Decoder - JWT Token 在线解码工具</title>
+<meta name="description" content="免费在线JWT Token解码器，实时解析Header、Payload、Signature，检测过期时间。">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh;display:flex;flex-direction:column}
-.container{max-width:900px;margin:0 auto;padding:20px;width:100%;flex:1}
-h1{text-align:center;font-size:2rem;margin:30px 0 8px;background:linear-gradient(135deg,#00d2ff,#7b2ff7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sub{text-align:center;color:#888;margin-bottom:30px;font-size:.95rem}
-label{display:block;font-weight:600;margin-bottom:8px;color:#ccc;font-size:.9rem}
-textarea{width:100%;height:120px;background:#16213e;border:1px solid #333;border-radius:10px;padding:14px;color:#e0e0e0;font-family:'Courier New',monospace;font-size:.85rem;resize:vertical;outline:none;transition:border-color .2s}
-textarea:focus{border-color:#7b2ff7}
-.btns{display:flex;gap:10px;margin:10px 0 24px;flex-wrap:wrap}
-button{padding:10px 20px;border:none;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .2s}
-.be{background:linear-gradient(135deg,#00d2ff,#7b2ff7);color:#fff}
-.be:hover{opacity:.85;transform:translateY(-1px)}
-.bc{background:#2a2a4a;color:#aaa;border:1px solid #444}
-.bc:hover{background:#333;color:#ccc}
-.err{background:#ff475722;border:1px solid #ff4757;color:#ff6b81;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:.9rem;display:none}
-.badge{display:inline-block;padding:5px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:16px}
-.bv{background:#00b89422;color:#00b894;border:1px solid #00b89455}
-.bx{background:#ff475722;color:#ff4757;border:1px solid #ff475755}
-.bn{background:#fdcb6e22;color:#fdcb6e;border:1px solid #fdcb6e55}
-.res{display:none}
-.sec{background:#16213e;border:1px solid #2a2a4a;border-radius:12px;padding:20px;margin-bottom:16px}
-.st{font-size:1rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-.dh{background:#00d2ff}.dp{background:#7b2ff7}
-pre{background:#0f0f23;border-radius:8px;padding:16px;overflow-x:auto;font-size:.82rem;line-height:1.6;font-family:'Courier New',monospace}
-.jk{color:#7b2ff7}.js{color:#00d2ff}.jn{color:#fdcb6e}.jb{color:#ff6b81}.jl{color:#888}.jt{color:#00b894;font-size:.75rem;font-style:italic}
-footer{text-align:center;padding:20px;color:#555;font-size:.75rem;border-top:1px solid #222}
-@media(max-width:600px){.container{padding:14px}h1{font-size:1.5rem}textarea{height:100px;font-size:.78rem}pre{font-size:.75rem;padding:12px}.btns{flex-direction:column}button{width:100%}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh;line-height:1.6}
+.container{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+h1{text-align:center;font-size:1.8rem;margin-bottom:6px;color:#e94560}
+.subtitle{text-align:center;color:#888;font-size:.9rem;margin-bottom:24px}
+.input-section{margin-bottom:24px}
+.input-section label{display:block;font-weight:600;margin-bottom:8px;color:#c0c0c0}
+textarea{width:100%;height:120px;background:#16213e;border:2px solid #0f3460;border-radius:8px;color:#e0e0e0;padding:12px;font-family:'Courier New',monospace;font-size:.85rem;resize:vertical;transition:border-color .2s}
+textarea:focus{outline:none;border-color:#e94560}
+textarea::placeholder{color:#555}
+.error{background:#2d1525;border:1px solid #e94560;color:#ff6b8a;padding:10px 14px;border-radius:8px;margin-bottom:16px;display:none}
+.result-section{display:none}
+.part{margin-bottom:20px;border-radius:10px;overflow:hidden;border:1px solid #0f3460}
+.part-header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-weight:700}
+.copy-btn{background:none;border:1px solid rgba(255,255,255,.2);color:#ccc;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:.8rem;transition:all .2s}
+.copy-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.part-body{padding:14px 16px;background:#16213e;font-family:'Courier New',monospace;font-size:.85rem;white-space:pre-wrap;word-break:break-all}
+.header-part .part-header{background:#0f3460;color:#53d8fb}
+.payload-part .part-header{background:#1b4332;color:#95d5b2}
+.signature-part .part-header{background:#4a1942;color:#d4a5d0}
+.header-part .part-body{color:#7ec8e3}
+.payload-part .part-body{color:#b7e4c7}
+.signature-part .part-body{color:#d4a5d0}
+.exp-banner{padding:12px 16px;border-radius:8px;margin-bottom:20px;font-weight:600;display:none}
+.exp-valid{background:#1b4332;border:1px solid #2d6a4f;color:#95d5b2}
+.exp-expired{background:#3d1a1a;border:1px solid #8b2020;color:#ff8a8a}
+@media(max-width:600px){
+h1{font-size:1.4rem}
+.container{padding:14px 10px 50px}
+textarea{height:100px;font-size:.78rem}
+.part-body{font-size:.78rem;padding:10px 12px}
+}
 </style>
 </head>
 <body>
 <div class="container">
-<h1>&#128272; JWT Decoder</h1>
-<p class="sub">Paste a JWT token to instantly decode and verify</p>
-<label for="ti">JWT Token</label>
-<textarea id="ti" placeholder="Paste your JWT token here..." spellcheck="false"></textarea>
-<div class="btns">
-<button class="be" onclick="loadEx()">&#128203; Example JWT</button>
-<button class="bc" onclick="clr()">&#10005; Clear</button>
+<h1>🔐 AI JWT Decoder</h1>
+<p class="subtitle">粘贴 JWT Token，实时解码 Header / Payload / Signature</p>
+<div class="input-section">
+<label for="jwt-input">JWT Token</label>
+<textarea id="jwt-input" placeholder="粘贴你的 JWT Token（eyJhbGciOi...）" spellcheck="false"></textarea>
 </div>
-<div class="err" id="err" role="alert"></div>
-<div class="res" id="res">
-<div id="sc" style="text-align:center"></div>
-<div class="sec"><div class="st"><span class="dot dh"></span> Header</div><pre id="ho"></pre></div>
-<div class="sec"><div class="st"><span class="dot dp"></span> Payload</div><pre id="po"></pre></div>
+<div class="error" id="error"></div>
+<div class="exp-banner" id="exp-banner"></div>
+<div class="result-section" id="results">
+<div class="part header-part">
+<div class="part-header"><span>📋 Header</span><button class="copy-btn" onclick="copyPart('header-body')">复制</button></div>
+<div class="part-body" id="header-body"></div>
 </div>
+<div class="part payload-part">
+<div class="part-header"><span>📦 Payload</span><button class="copy-btn" onclick="copyPart('payload-body')">复制</button></div>
+<div class="part-body" id="payload-body"></div>
 </div>
-<!-- Pro Features Section -->
-<style>
-.pro-section{max-width:900px;margin:30px auto 0;padding:0 20px}
-.pro-header{text-align:center;margin-bottom:18px}
-.pro-header h2{font-size:1.3rem;color:#7b2ff7;display:flex;align-items:center;justify-content:center;gap:8px}
-.pro-header p{color:#666;font-size:.85rem;margin-top:4px}
-.pro-blur-wrap{position:relative;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid #2a2a4a;transition:border-color .3s}
-.pro-blur-wrap:hover{border-color:#7b2ff7}
-.pro-mock{filter:blur(4px);pointer-events:none;user-select:none;padding:24px;background:#16213e}
-.pro-mock-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-@media(max-width:600px){.pro-mock-row{grid-template-columns:1fr}}
-.pro-mock-card{background:#0f0f23;border:1px solid #333;border-radius:8px;padding:16px}
-.pro-mock-card h4{font-size:.85rem;color:#00d2ff;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.pro-mock-label{font-size:.75rem;color:#666;margin-bottom:4px}
-.pro-mock-input{background:#1a1a2e;border:1px solid #333;border-radius:6px;padding:8px 10px;color:#555;font-size:.8rem;width:100%;margin-bottom:8px}
-.pro-mock-textarea{background:#1a1a2e;border:1px solid #333;border-radius:6px;padding:8px 10px;color:#555;font-size:.75rem;width:100%;height:60px;font-family:'Courier New',monospace;margin-bottom:8px}
-.pro-mock-btn{background:linear-gradient(135deg,#00d2ff,#7b2ff7);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:.8rem;opacity:.7;width:100%;margin-top:8px}
-.pro-mock-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:600;margin:2px}
-.pro-mock-badge-ok{background:#00b89422;color:#00b894;border:1px solid #00b89455}
-.pro-mock-badge-warn{background:#fdcb6e22;color:#fdcb6e;border:1px solid #fdcb6e55}
-.pro-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,10,26,.55);gap:8px}
-.pro-lock{font-size:2.5rem;filter:drop-shadow(0 0 20px rgba(123,47,247,.5))}
-.pro-overlay span:last-child{color:#ccc;font-size:.9rem;font-weight:500}
-.pro-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);padding:20px}
-.pro-modal{background:#16213e;border:1px solid #7b2ff7;border-radius:16px;padding:32px;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:proFadeIn .25s ease}
-@keyframes proFadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-.pro-modal h3{font-size:1.4rem;margin-bottom:6px;background:linear-gradient(135deg,#00d2ff,#7b2ff7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.pro-modal .pro-price{font-size:1.1rem;color:#888;margin-bottom:20px}
-.pro-modal ul{text-align:left;list-style:none;margin-bottom:24px;padding:0}
-.pro-modal ul li{padding:8px 0;border-bottom:1px solid #1a1a3e;color:#ccc;font-size:.9rem;display:flex;align-items:center;gap:8px}
-.pro-modal ul li:last-child{border-bottom:none}
-.pro-modal ul li::before{content:'✅';font-size:.8rem}
-.pro-upgrade-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#00d2ff,#7b2ff7);color:#fff;border:none;border-radius:10px;font-size:1.05rem;font-weight:700;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s;margin-bottom:12px}
-.pro-upgrade-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(123,47,247,.4)}
-.pro-later-btn{background:none;border:none;color:#666;cursor:pointer;font-size:.85rem;padding:8px;transition:color .2s}
-.pro-later-btn:hover{color:#aaa}
-</style>
-
-<div class="pro-section">
-<div class="pro-header">
-<h2>🔒 Pro Features</h2>
-<p>Advanced JWT verification & batch processing</p>
-</div>
-<div class="pro-blur-wrap" onclick="document.getElementById('proModal').style.display='flex'">
-<div class="pro-mock">
-<div class="pro-mock-row">
-<div class="pro-mock-card">
-<h4>🔐 Signature Verification</h4>
-<div class="pro-mock-label">Algorithm: HS256</div>
-<div class="pro-mock-input">Enter your secret key or public key...</div>
-<div class="pro-mock-btn">Verify Signature</div>
-<div style="margin-top:10px;text-align:center">
-<span class="pro-mock-badge pro-mock-badge-ok">✅ Signature Valid</span>
-</div>
-</div>
-<div class="pro-mock-card">
-<h4>📦 Batch Decode</h4>
-<div class="pro-mock-label">Paste multiple JWTs (one per line)</div>
-<div class="pro-mock-textarea">eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOi...
-eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOi...
-eyJhbGciOiJFUzI1NiJ9.eyJuYW1lIj...</div>
-<div class="pro-mock-btn">Decode All (3 tokens)</div>
-</div>
-</div>
-<div class="pro-mock-card" style="width:100%">
-<h4>🔗 API Integration</h4>
-<div class="pro-mock-label">REST API Endpoint</div>
-<div class="pro-mock-input">POST https://api.jwt-decoder.pro/v1/decode</div>
-<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
-<span class="pro-mock-badge pro-mock-badge-warn">API Key: sk-****-****-abc123</span>
-<span class="pro-mock-badge pro-mock-badge-ok">1,000 req/day</span>
+<div class="part signature-part">
+<div class="part-header"><span>🔑 Signature</span><button class="copy-btn" onclick="copyPart('sig-body')">复制</button></div>
+<div class="part-body" id="sig-body"></div>
 </div>
 </div>
 </div>
-<div class="pro-overlay">
-<span class="pro-lock">🔒</span>
-<span>Click to unlock Pro features</span>
-</div>
-</div>
-</div>
-
-<div id="proModal" class="pro-modal-bg" style="display:none" onclick="if(event.target===this)this.style.display='none'">
-<div class="pro-modal">
-<h3>🔑 JWT Decoder Pro</h3>
-<p class="pro-price">One-time purchase — $9</p>
-<ul>
-<li>JWT signature verification (HS256, RS256, ES256+)</li>
-<li>Batch decode — process multiple tokens at once</li>
-<li>REST API integration with API key</li>
-<li>Priority support & future updates</li>
-</ul>
-<a href="https://feifeicch.gumroad.com/l/ai-jwt-decoder-pro" target="_blank" class="pro-upgrade-btn">Upgrade to Pro — $9</a>
-<button class="pro-later-btn" onclick="document.getElementById('proModal').style.display='none'">Maybe later</button>
-</div>
-</div>
-
-<footer>JWT Decoder &mdash; All decoding happens in your browser. No data is sent to any server.</footer>
 <script>
-var TF=['iat','exp','nbf','auth_time','updated_at','created_at'];
-function b64d(s){
+function b64urlDecode(s){
 s=s.replace(/-/g,'+').replace(/_/g,'/');
 while(s.length%4)s+='=';
-try{return decodeURIComponent(atob(s).split('').map(function(c){return '%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)}).join(''))}
-catch(e){return atob(s)}
+try{return decodeURIComponent(atob(s).split('').map(function(c){return '%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)}).join(''));}
+catch(e){return atob(s);}
 }
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function hl(obj){
-var j=JSON.stringify(obj,null,2),r='',lines=j.split('\n');
-for(var i=0;i<lines.length;i++){
-var l=lines[i],m=l.match(/^(\s*)"([^"]+)"\s*:\s*(.+?)(,?)$/);
-if(m){
-var sp=m[1],k=m[2],v=m[3].trim(),cm=m[4]||'';
-if(cm&&v.endsWith(','))v=v.slice(0,-1);
-var vh;
-if(v.charAt(0)==='"')vh='<span class="js">'+esc(v)+'</span>';
-else if(v==='true'||v==='false')vh='<span class="jb">'+v+'</span>';
-else if(v==='null')vh='<span class="jl">null</span>';
-else if(!isNaN(Number(v))){
-vh='<span class="jn">'+v+'</span>';
-if(TF.indexOf(k)!==-1){var d=new Date(Number(v)*1000);vh+=' <span class="jt">\u2190 '+esc(d.toLocaleString())+'</span>'}
-}else vh=esc(v);
-r+=sp+'<span class="jk">"'+esc(k)+'"</span>: '+vh+cm+'\n';
-}else r+=esc(l)+'\n';
-}return r;
+function formatTime(ts){
+var d=new Date(ts*1000);
+return d.toLocaleString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
 }
-function decode(t){
-var el=document.getElementById('err'),rl=document.getElementById('res'),sc=document.getElementById('sc');
-el.style.display='none';rl.style.display='none';sc.innerHTML='';
-t=t.trim();if(!t)return;
-var parts=t.split('.');
-if(parts.length<2||parts.length>3){el.textContent='Invalid JWT: expected 2 or 3 dot-separated parts, got '+parts.length;el.style.display='block';return}
-try{var header=JSON.parse(b64d(parts[0]))}catch(e){el.textContent='Failed to decode header: '+e.message;el.style.display='block';return}
-try{var payload=JSON.parse(b64d(parts[1]))}catch(e){el.textContent='Failed to decode payload: '+e.message;el.style.display='block';return}
-document.getElementById('ho').innerHTML=hl(header);
-document.getElementById('po').innerHTML=hl(payload);
-if(typeof payload.exp==='number'){
-var now=Math.floor(Date.now()/1000);
-if(now<payload.exp){sc.innerHTML='<span class="badge bv">\u2705 Valid \u2014 expires '+new Date(payload.exp*1000).toLocaleString()+'</span>'}
-else{sc.innerHTML='<span class="badge bx">\u274c Expired \u2014 '+new Date(payload.exp*1000).toLocaleString()+'</span>'}
-}else{sc.innerHTML='<span class="badge bn">\u26a0 No expiration claim</span>'}
-rl.style.display='block';
+function humanDur(ms){
+var s=Math.floor(Math.abs(ms)/1000);
+if(s<60)return s+'秒';
+var m=Math.floor(s/60);
+if(m<60)return m+'分钟';
+var h=Math.floor(m/60);
+if(h<24)return h+'小时'+(m%60?' '+m%60+'分钟':'');
+var d=Math.floor(h/24);
+return d+'天'+(h%24?' '+h%24+'小时':'');
 }
-function loadEx(){
-var now=Math.floor(Date.now()/1000);
-var h=btoa(JSON.stringify({alg:'HS256',typ:'JWT'})).replace(/=/g,'');
-var p=btoa(JSON.stringify({sub:'1234567890',name:'John Doe',email:'john@example.com',role:'admin',iss:'https://auth.example.com',aud:'my-app',iat:now-3600,nbf:now-3600,exp:now+3600})).replace(/=/g,'');
-document.getElementById('ti').value=h+'.'+p+'.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-decode(document.getElementById('ti').value);
+var timeKeys=['exp','iat','nbf','auth_time','updated_at','created_at'];
+function annotate(obj){
+var t=JSON.stringify(obj,null,2);
+timeKeys.forEach(function(k){
+if(obj[k]&&typeof obj[k]==='number'&&obj[k]>1e9&&obj[k]<2e10){
+t=t.replace(new RegExp('("'+k+'":\\s*)(\\d+)'),'$1$2  ← '+formatTime(obj[k]));
 }
-function clr(){document.getElementById('ti').value='';document.getElementById('err').style.display='none';document.getElementById('res').style.display='none'}
-var timer;
-document.getElementById('ti').addEventListener('input',function(){clearTimeout(timer);timer=setTimeout(function(){decode(document.getElementById('ti').value)},300)});
+});
+return t;
+}
+function copyPart(id){
+var text=document.getElementById(id).textContent;
+navigator.clipboard.writeText(text).then(function(){
+event.target.textContent='已复制✓';
+setTimeout(function(){event.target.textContent='复制';},1500);
+});
+}
+function decode(){
+var el=document.getElementById('jwt-input');
+var err=document.getElementById('error');
+var res=document.getElementById('results');
+var ban=document.getElementById('exp-banner');
+var token=el.value.trim();
+if(!token){err.style.display='none';res.style.display='none';ban.style.display='none';return;}
+var parts=token.split('.');
+if(parts.length!==3){
+err.textContent='❌ 无效的 JWT 格式：需要三段由 . 分隔的字符串';
+err.style.display='block';res.style.display='none';ban.style.display='none';return;
+}
+try{
+var header=JSON.parse(b64urlDecode(parts[0]));
+var payload=JSON.parse(b64urlDecode(parts[1]));
+}catch(e){
+err.textContent='❌ 解码失败：Base64 或 JSON 解析错误';
+err.style.display='block';res.style.display='none';ban.style.display='none';return;
+}
+err.style.display='none';
+document.getElementById('header-body').textContent=JSON.stringify(header,null,2);
+document.getElementById('payload-body').textContent=annotate(payload);
+document.getElementById('sig-body').textContent=parts[2];
+res.style.display='block';
+if(payload.exp){
+var now=Date.now();
+var expMs=payload.exp*1000;
+var diff=expMs-now;
+if(diff>0){
+ban.className='exp-banner exp-valid';
+ban.textContent='✅ Token 有效 — 将在 '+humanDur(diff)+' 后过期（'+formatTime(payload.exp)+'）';
+}else{
+ban.className='exp-banner exp-expired';
+ban.textContent='❌ Token 已过期 — 过期于 '+humanDur(diff)+' 前（'+formatTime(payload.exp)+'）';
+}
+ban.style.display='block';
+}else{
+ban.style.display='none';
+}
+}
+document.getElementById('jwt-input').addEventListener('input',decode);
 </script>
 <script src="https://alwingulla.com/88/tag.min.js" data-zone="130747" async data-cfasync="false"></script>
 </body>
